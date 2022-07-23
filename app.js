@@ -4,7 +4,10 @@ const app = express();
 
 
 const projectsRoutes = require('./routes/project')
-app.use(express.json());
+const { authUser, authRole} = require('./middleware/auth')
+const { ROLE, users } = require('./data')
+app.use(express.json())
+app.use(setUser)
 
 //fucking cors
 app.use((req, res, next) => {
@@ -14,7 +17,24 @@ app.use((req, res, next) => {
     next();
   });
 
+  app.get('/', (req, res) => {
+    res.send('Home Page')
+  })
+  
+  app.get('/dashboard', authUser, (req, res) => {
+    res.send('Dashboard Page')
+  })
 
-  app.use('/project', projectsRoutes);
+  app.get('/admin', authUser, authRole(ROLE.ADMIN), (req, res) => {
+    res.send('Admin Page')
+  })
+
+  function setUser(req, res, next) {
+    const userId = req.body.userId
+    if (userId) {
+      req.user = users.find(user => user.id === userId)
+    }
+    next()
+  }
 
 module.exports = app;
