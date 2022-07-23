@@ -2,6 +2,8 @@ const express = require('express');
 
 const app = express();
 
+
+const projectsRoutes = require('./routes/project')
 app.use(express.json());
 
 //fucking cors
@@ -13,5 +15,6 @@ app.use((req, res, next) => {
   });
 
 
+  app.use('/project', projectsRoutes);
 
 module.exports = app;
