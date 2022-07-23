@@ -12,7 +12,7 @@ router.get('/',  (req, res) => {
     res.json(req.project)
   })
   
-  router.delete('/:projectId' ,(req, res) => {
+  router.delete('/:projectId' , setProject, (req, res) => {
     res.send('Deleted Project')
   })
 
